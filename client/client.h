@@ -28,7 +28,7 @@ class Client {
   bool init(std::string& dest, Options opts = Options());
   bool send(const std::string& msg);
   bool receive(std::string& dest);
-  std::string error() const;
+  std::string error() const { return error_; }
 
  private:
   void clearError() {

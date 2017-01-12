@@ -114,7 +114,7 @@ int newClient(lua_State* L) {
   auto port = luaL_checkint(L, 2);
   client::Client* cl;
   try {
-	client::Connection conn(client::Connection(hostname, port));
+    client::Connection conn(client::Connection(hostname, port));
     cl = new client::Client(std::move(conn));
   } catch (zmq::error_t& e) {
     return luaL_error(L, e.what());
@@ -138,8 +138,8 @@ int freeClient(lua_State* L) {
 }
 
 int gcClient(lua_State* L) {
-  auto cl = static_cast<client::Client**>(
-      luaL_checkudata(L, 1, "torchcraft.Client"));
+  auto cl =
+      static_cast<client::Client**>(luaL_checkudata(L, 1, "torchcraft.Client"));
   assert(*cl != nullptr);
   delete *cl;
   *cl = nullptr;
@@ -207,7 +207,8 @@ int initClient(lua_State* L) {
 
   std::string reply;
   if (!cl->init(reply, std::move(opts))) {
-    return luaL_error(L, "initial connection setup failed");
+    auto err = "initial connection setup failed: " + cl->error();
+    return luaL_error(L, err.c_str());
   }
 
   luaL_dostring(L, ("return " + reply).c_str());
@@ -242,7 +243,8 @@ int sendClient(lua_State* L) {
   }
 
   if (!cl->send(msg)) {
-    return luaL_error(L, "Client.send");
+    auto err = "send failed: " + cl->error();
+    return luaL_error(L, err.c_str());
   }
   return 0;
 }
@@ -252,7 +254,8 @@ int receiveClient(lua_State* L) {
       static_cast<client::Client*>(luaT_checkudata(L, 1, "torchcraft.Client"));
   std::string reply;
   if (!cl->receive(reply)) {
-    return luaL_error(L, "Client.receive");
+    auto err = "receive failed: " + cl->error();
+    return luaL_error(L, err.c_str());
   }
 
   // Detect optional image in reply from server
