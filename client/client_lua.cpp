@@ -16,29 +16,6 @@
 
 namespace {
 
-// Just for debugging
-void stackDump(lua_State* L) {
-  int top = lua_gettop(L);
-  for (int i = 1; i <= top; i++) {
-    int t = lua_type(L, i);
-    switch (t) {
-      case LUA_TSTRING: /* strings */
-        printf("[%d] `%s'", i, lua_tostring(L, i));
-        break;
-      case LUA_TBOOLEAN: /* booleans */
-        printf("[%d] %s", i, lua_toboolean(L, i) ? "true" : "false");
-        break;
-      case LUA_TNUMBER: /* numbers */
-        printf("[%d] %g", i, lua_tonumber(L, i));
-        break;
-      default: /* other values */
-        printf("[%d] %s (%p)", i, lua_typename(L, t), lua_topointer(L, i));
-        break;
-    }
-    printf("\n"); /* put a separator */
-  }
-}
-
 // client userdata is at index, update is at top of stack
 void updateState(lua_State* L, int index) {
   // push state table onto stack
