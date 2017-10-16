@@ -78,7 +78,7 @@ void ZMQ_server::connect()
         this->sock->bind(url.str());
         this->port = port;
         break;
-      } catch (const zmq::error_t& e) {
+      } catch (...) {
         // Try next port
       }
       this->sock = nullptr;
@@ -95,7 +95,7 @@ void ZMQ_server::connect()
       this->sock = nullptr;
       this->sock = std::make_unique<zmq::socket_t>(*ctx.get(), zmq::socket_type::rep);
 #ifdef _WIN32
-      if (setsockopt(zsock_fd(this->server_sock), SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) != 0) {
+      if (setsockopt(this->sock->getsockopt<int>(ZMQ_FD), SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) != 0) {
         std::cout << "SO_REUSEADDR setsockopt failed with " << WSAGetLastError() << std::endl;
       }
 #else

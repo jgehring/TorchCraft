@@ -730,7 +730,7 @@ void Controller::onFrame() {
   }
 
   // Save frame state
-  if (!battle_ended || !this->sent_battle_end_frame) {
+  if (!battle_ended || !this->sent_battle_end_frame || last_frame == nullptr) {
     replayer::Frame* f = new replayer::Frame();
     f->height = BWAPI::Broodwar->mapHeight() * 4;
     f->width = BWAPI::Broodwar->mapWidth() * 4;
