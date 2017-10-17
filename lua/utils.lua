@@ -76,8 +76,8 @@ end
 
 -- distance given two tables {x,y}
 function utils.distance(pos1, pos2)
-    local x1, y1 = unpack(pos1)
-    local x2, y2 = unpack(pos2)
+    local x1, y1 = table.unpack(pos1)
+    local x2, y2 = table.unpack(pos2)
     local dx = x1 - x2
     local dy = y1 - y2
     return math.sqrt(dx * dx + dy * dy)
@@ -257,7 +257,7 @@ end
 ]]
 
 function utils.hsv_to_rgb(hsv)
-    local h, s, v = unpack(hsv)
+    local h, s, v = table.unpack(hsv)
     h = h / 360
     s = s / 100
     v = v / 100

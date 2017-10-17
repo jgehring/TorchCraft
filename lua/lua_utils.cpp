@@ -63,7 +63,7 @@ void deepCopyTable(lua_State* L, int dindex, int index) {
         lua_pushnumber(L, lua_tonumber(L, -1));
         break;
       case LUA_TSTRING:
-        lua_pushlstring(L, lua_tostring(L, -1), lua_strlen(L, -1));
+        lua_pushlstring(L, lua_tostring(L, -1), lua_rawlen(L, -1));
         break;
       case LUA_TTABLE:
         deepCloneTable(L);
